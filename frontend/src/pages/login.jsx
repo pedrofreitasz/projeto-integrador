@@ -1,68 +1,44 @@
-import React, { useState } from 'react';
+import { useState } from "react";
+import { login } from "../services/api";
 import { Link, useNavigate } from 'react-router-dom';
 
-function Login() {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [loading, setLoading] = useState(false);
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
+    setError("");
+    
     try {
-      const response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, senha }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        alert(data.error || 'Erro ao fazer login');
-        return;
+      const res = await login({ email, senha });
+
+      if (res.token) {
+        localStorage.setItem("token", res.token);
+        navigate("/perfil");
+      } else {
+        setError("Erro ao fazer login");
       }
-      localStorage.setItem('usuario', JSON.stringify(data.usuario));
-      navigate('/perfil');
     } catch (err) {
-      alert('Erro ao fazer login');
-    } finally {
-      setLoading(false);
+      setError(err.message || "Erro ao fazer login");
     }
-  };
+  }
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div>
       <h1>Login</h1>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Email</label><br />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: '300px', padding: '5px', border: '1px solid #ccc' }}
-            required
-          />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Senha</label><br />
-          <input
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            style={{ width: '300px', padding: '5px', border: '1px solid #ccc' }}
-            required
-          />
-        </div>
-        <button type="submit" disabled={loading} style={{ padding: '5px 15px' }}>
-          {loading ? 'Entrando...' : 'Entrar'}
-        </button>
+        <input style={{ width: '300px', padding: '5px', border: '1px solid #ccc' }} placeholder="Email" onChange={e => setEmail(e.target.value)} />
+        <input style={{ width: '300px', padding: '5px', border: '1px solid #ccc' }} type="password" placeholder="Senha" onChange={e => setSenha(e.target.value)} />
+        <button>Entrar</button>
       </form>
-      <div style={{ marginTop: '10px' }}>
+      <div>
         <Link to="/cadastro">Cadastro</Link> | <Link to="/">Home</Link>
       </div>
     </div>
   );
 }
 
-export default Login;

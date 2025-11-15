@@ -1,51 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { getProfile } from "../services/api";
 
-function Perfil() {
-  const [usuario, setUsuario] = useState(null);
+export default function Perfil() {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const usuarioStorage = localStorage.getItem('usuario');
-    if (usuarioStorage) {
-      const usuarioData = JSON.parse(usuarioStorage);
-      fetch(`http://localhost:5000/usuario/${usuarioData.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) throw new Error(data.error);
-          setUsuario(data);
-        })
-        .catch(() => {
-          alert('Erro ao carregar perfil');
-          navigate('/login');
-        });
-    } else {
-      navigate('/login');
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
     }
+
+    getProfile(token)
+      .then(data => {
+        setUser(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message || "Erro ao carregar perfil");
+        setLoading(false);
+        if (err.message.includes("Token") || err.message.includes("401")) {
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      });
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('usuario');
-    navigate('/login');
-  };
-
-  if (!usuario) return <div style={{ padding: '20px' }}>Carregando...</div>;
-
+  if (loading) return <p>Carregando...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (!user) return <p>Nenhum dado encontrado</p>;
+  
   return (
     <div style={{ padding: '20px' }}>
       <h1>Perfil</h1>
-      <div style={{ marginBottom: '10px' }}>
-        <p><strong>Nome:</strong> {usuario.nome}</p>
-        <p><strong>Email:</strong> {usuario.email}</p>
-      </div>
-      <button onClick={handleLogout} style={{ padding: '5px 15px', marginBottom: '10px' }}>
-        Sair
-      </button>
       <div>
-        <Link to="/">Home</Link>
+        <p>ID: {user.id}</p>
+        <p>Nome: {user.nome}</p>
+        <p>Email: {user.email}</p>
+        <p>Cadastrado em: {user.created_at}</p>
+      </div>
+      <div>
+        <Link to="/"><b>Home</b></Link>
       </div>
     </div>
   );
 }
-
-export default Perfil;

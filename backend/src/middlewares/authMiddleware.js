@@ -1,17 +1,19 @@
 import jwt from "jsonwebtoken";
 
-const SECRET = "segredo_super_forte";
+const SECRET = process.env.JWT_SECRET || "development_secret";
 
 export const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization?.replace("Bearer ", "");
 
-  if (!token) return res.status(401).json({ error: "Token não fornecido" });
+  if (!token) {
+    return res.status(401).json({ message: "Token não fornecido." });
+  }
 
   try {
     const decoded = jwt.verify(token, SECRET);
     req.user = decoded;
-    next();
+    return next();
   } catch {
-    res.status(401).json({ error: "Token inválido" });
+    return res.status(401).json({ message: "Token inválido ou expirado." });
   }
 };

@@ -15,7 +15,7 @@ export function useAuth() {
 
       try {
         const res = await getProfile(token);
-        if (res && res.id) {
+        if (res && res.user?.id) {
           setAuth("logged");
         } else {
           setAuth("not_logged");

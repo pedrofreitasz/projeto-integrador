@@ -1,50 +1,62 @@
-export const API = "http://localhost:5000/users";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-export async function register(data) {
-  const response = await fetch(`${API}/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+const defaultHeaders = {
+  "Content-Type": "application/json"
+};
+
+const extractFieldErrors = (errors) => {
+  if (!errors) return undefined;
+
+  const parsed = {};
+  Object.entries(errors).forEach(([field, message]) => {
+    parsed[field] = message;
   });
+  return parsed;
+};
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error || "Erro ao registrar");
-  }
-
-  return result;
-}
-
-export async function login(data) {
-  const response = await fetch(`${API}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error || "Erro ao fazer login");
-  }
-
-  return result;
-}
-
-export async function getProfile(token) {
-  const response = await fetch(`${API}/profile`, {
-    method: "GET",
+const request = async (path, options = {}) => {
+  const response = await fetch(`${API_URL}${path}`, {
+    ...options,
     headers: {
-      "Authorization": `Bearer ${token}`
+      ...defaultHeaders,
+      ...(options.headers || {})
     }
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.error || "Erro ao buscar perfil");
+  let body = null;
+  try {
+    body = await response.json();
+  } catch (error) {
+    body = null;
   }
 
-  return result;
-}
+  if (!response.ok) {
+    const error = new Error(
+      body?.message || Object.values(body?.errors || {})[0] || "Algo deu errado."
+    );
+    error.fieldErrors = extractFieldErrors(body?.errors);
+    throw error;
+  }
+
+  return body;
+};
+
+export const register = (data) =>
+  request("/auth/register", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+export const login = (data) =>
+  request("/auth/login", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+export const getProfile = (token) =>
+  request("/auth/profile", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });

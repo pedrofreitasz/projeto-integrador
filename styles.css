@@ -1,0 +1,239 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #F5F5F5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilos do logo */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.8)) drop-shadow(0 0 20px rgba(0, 255, 136, 0.4));
+    animation: neon-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse {
+    from {
+        filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.8)) drop-shadow(0 0 20px rgba(0, 255, 136, 0.4));
+    }
+    to {
+        filter: drop-shadow(0 0 15px rgba(0, 255, 136, 1)) drop-shadow(0 0 30px rgba(0, 255, 136, 0.6));
+    }
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: -0.5px;
+}
+
+/* Cartão de Login */
+.login-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px 32px;
+    width: 100%;
+}
+
+.welcome-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.welcome-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+/* Estilos do formulário */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.password-label-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forgot-password {
+    font-size: 13px;
+    color: #00D970;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.forgot-password:hover {
+    color: #00B85C;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #000;
+    background: #FFFFFF;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #00D970;
+}
+
+.form-group input::placeholder {
+    color: #999;
+}
+
+/* Container de entrada de senha */
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-container input {
+    padding-right: 48px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: #000;
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Botão de Login */
+.login-button {
+    width: 100%;
+    padding: 16px;
+    background: #00D970;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 8px;
+}
+
+.login-button:hover {
+    background: #00B85C;
+}
+
+.login-button:active {
+    transform: scale(0.98);
+}
+
+/* Rodapé do cartão */
+.card-footer {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.footer-text {
+    color: #666;
+}
+
+.signup-link {
+    color: #00D970;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 4px;
+    transition: color 0.2s;
+}
+
+.signup-link:hover {
+    color: #00B85C;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 32px 24px;
+    }
+
+    .welcome-title {
+        font-size: 24px;
+    }
+
+    .logo-text {
+        font-size: 20px;
+    }
+}
+

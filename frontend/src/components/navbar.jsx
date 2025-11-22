@@ -16,9 +16,9 @@ export default function Navbar() {
         <ul className="flex items-center gap-8 text-sm font-medium text-gray-700">
           <li><Link to="/" className="hover:text-emerald-600 transition">Início</Link></li>
           <li><Link to="/mapa" className="hover:text-emerald-600 transition">Mapa de Pontos</Link></li>
-          <li><Link to="/orçamentos" className="hover:text-emerald-600 transition">Para Empresas</Link></li>
+          <li><Link to="/orcamentos" className="hover:text-emerald-600 transition">Orçamento</Link></li>
           <li><Link to="/calculadora" className="hover:text-emerald-600 transition">Calculadora</Link></li>
-          <li><Link to="/FAQ" className="hover:text-emerald-600 transition">Blog</Link></li>
+          <li><Link to="/historico" className="hover:text-emerald-600 transition">Histórico</Link></li>
           <li><Link to="/FAQ" className="hover:text-emerald-600 transition">FAQ</Link></li>
         </ul>
       </nav>

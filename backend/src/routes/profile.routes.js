@@ -1,8 +1,10 @@
-const router = require('express').Router();
-const verifyToken = require('../middleware/authMiddleware');
-const db = require('../utils/db');
+import { Router } from 'express';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { pool } from '../config/db.js';
 
-router.get('/profile', verifyToken, async (req, res) => {
+const router = Router();
+
+router.get('/profile', authMiddleware, async (req, res) => {
     try {
         const userId = req.user.id; 
 
@@ -13,7 +15,7 @@ router.get('/profile', verifyToken, async (req, res) => {
             LIMIT 1
         `;
 
-        const result = await db.query(query, [userId]);
+        const result = await pool.query(query, [userId]);
 
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "Usuário não encontrado." });
@@ -35,4 +37,4 @@ router.get('/profile', verifyToken, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

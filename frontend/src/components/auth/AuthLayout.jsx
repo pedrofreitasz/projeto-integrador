@@ -11,9 +11,6 @@ export default function AuthLayout({ children }) {
               EV Charge SC
             </span>
           </div>
-          <p className="text-sm text-slate-500">
-            Acesse suas informações de carregamento com segurança.
-          </p>
         </header>
 
         <main className="w-full max-w-[360px]">{children}</main>

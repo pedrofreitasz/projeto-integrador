@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 function Home() {
   const pages = [
@@ -15,15 +17,16 @@ function Home() {
   ];
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Home</h1>
-      <ul>
-        {pages.map((page) => (
-          <li key={page.path} style={{ marginBottom: '5px' }}>
-            <Link to={page.path}>{page.name}</Link>
-          </li>
-        ))}
-      </ul>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+
+      <main className="flex-grow">
+        <section>
+          <h1>Página Home</h1>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 }

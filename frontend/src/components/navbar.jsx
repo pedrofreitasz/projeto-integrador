@@ -14,26 +14,26 @@ export default function Navbar() {
 
       <nav>
         <ul className="flex items-center gap-8 text-sm font-medium text-gray-700">
-          <li><Link to="/">Início</Link></li>
-          <li><Link to="/mapa">Mapa de Pontos</Link></li>
-          <li><Link to="/orçamentos">Orçamentos</Link></li>
-          <li><Link to="/calculadora">Calculadora</Link></li>
-          <li><Link to="/historico">Histórico</Link></li>
-          <li><Link to="/FAQ">FAQ</Link></li>
+          <li><Link to="/" className="hover:text-emerald-600 transition">Início</Link></li>
+          <li><Link to="/mapa" className="hover:text-emerald-600 transition">Mapa de Pontos</Link></li>
+          <li><Link to="/orçamentos" className="hover:text-emerald-600 transition">Para Empresas</Link></li>
+          <li><Link to="/calculadora" className="hover:text-emerald-600 transition">Calculadora</Link></li>
+          <li><Link to="/FAQ" className="hover:text-emerald-600 transition">Blog</Link></li>
+          <li><Link to="/FAQ" className="hover:text-emerald-600 transition">FAQ</Link></li>
         </ul>
       </nav>
 
       <div className="flex items-center gap-4">
         <Link
           to="/login"
-          className="px-6 py-2 rounded-xl border border-green-400 text-green-500 hover:bg-green-50 transition"
+          className="px-6 py-2 rounded-lg border border-emerald-400 text-emerald-500 hover:bg-emerald-50 transition font-medium"
         >
           Login
         </Link>
 
         <Link
           to="/cadastro"
-          className="px-6 py-2 rounded-xl bg-green-400 text-black font-semibold hover:bg-green-500 transition"
+          className="px-6 py-2 rounded-lg bg-emerald-500 text-black font-semibold hover:bg-emerald-600 transition"
         >
           Cadastrar
         </Link>

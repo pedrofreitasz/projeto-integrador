@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="w-full bg-white px-16 py-12 border-t mt-auto">
@@ -23,18 +25,20 @@ export default function Footer() {
         <div>
             <h2 className="font-semibold mb-4">LINKS RÁPIDOS</h2>
             <ul className="flex flex-col gap-2 text-sm text-gray-700">
-                <li>Início</li>
-                <li>Serviços</li>
-                <li>Sobre nós</li>
-                <li>Contato</li>
+                <li>
+                  <Link to="/" className="hover:text-emerald-600 transition">Início</Link>
+                </li>
+                <li>
+                  <Link to="/calculadora" className="hover:text-emerald-600 transition">Calculadora</Link>
+                </li>
             </ul>
         </div>
 
         <div>
           <h2 className="font-semibold mb-4">CONTATO</h2>
           <ul className="flex flex-col gap-2 text-sm text-gray-700">
-            <li>aaaaaaa@gmail.com</li>
-            <li>(49) 99999-9999</li>
+            <li>chargescev@gmail.com</li>
+            <li>(49) 99800-3195</li>
             <li>Rodovia SC 283 – km 17,</li>
             <li>Concórdia – Santa Catarina, CEP 89703-720</li>
           </ul>

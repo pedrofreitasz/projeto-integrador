@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charge SC - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo-container">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Carregador Elétrico -->
+                    <rect x="8" y="2" width="8" height="6" rx="1" fill="#00FF88"/>
+                    <path d="M9 4H15M9 6H15" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+                    <rect x="10" y="8" width="4" height="12" rx="0.5" fill="#00FF88"/>
+                    <path d="M12 8V20" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="12" cy="20" r="2" fill="#00FF88" stroke="#000" stroke-width="1.5"/>
+                </svg>
+            </div>
+            <h1 class="logo-text">EV Charge SC</h1>
+        </div>
+
+        <!-- Login Card -->
+        <div class="login-card">
+            <h2 class="welcome-title">Bem-vindo de volta</h2>
+            <p class="welcome-subtitle">Acesse sua conta para continuar</p>
+
+            <form class="login-form">
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="seuemail@exemplo.com"
+                        required
+                    >
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <div class="password-label-container">
+                        <label for="password">Senha</label>
+                        <a href="#" class="forgot-password">Esqueceu sua senha?</a>
+                    </div>
+                    <div class="password-input-container">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Digite sua senha"
+                            required
+                        >
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="login-button">Entrar</button>
+            </form>
+
+            <!-- Footer -->
+            <div class="card-footer">
+                <span class="footer-text">Não tem uma conta?</span>
+                <a href="#" class="signup-link">Cadastre-se</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

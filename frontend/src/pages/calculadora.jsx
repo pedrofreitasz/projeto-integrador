@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
@@ -282,9 +283,12 @@ function Calculadora() {
                   Este é um valor aproximado. Solicite um orçamento para obter o preço final.
                 </p>
 
-                <button className="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors">
+                <Link
+                  to="/orcamentos"
+                  className="block w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors text-center"
+                >
                   Solicitar Orçamento Detalhado
-                </button>
+                </Link>
               </div>
             </div>
           </div>

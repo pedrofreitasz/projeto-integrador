@@ -18,7 +18,7 @@ export default function Perfil() {
 
     getProfile(token)
       .then(data => {
-        setUser(data);
+        setUser(data.user || data);
         setLoading(false);
       })
       .catch(err => {
@@ -40,9 +40,9 @@ export default function Perfil() {
       <h1>Perfil</h1>
       <div>
         <p>ID: {user.id}</p>
-        <p>Nome: {user.nome}</p>
+        <p>Nome: {user.name || user.nome}</p>
         <p>Email: {user.email}</p>
-        <p>Cadastrado em: {user.created_at}</p>
+        <p>Cadastrado em: {user.createdAt || user.created_at}</p>
       </div>
       <div>
         <Link to="/"><b>Home</b></Link>

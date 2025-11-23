@@ -15,30 +15,42 @@ const extractFieldErrors = (errors) => {
 };
 
 const request = async (path, options = {}) => {
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...(options.headers || {})
-    }
-  });
-
-  let body = null;
   try {
-    body = await response.json();
+    const response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: {
+        ...defaultHeaders,
+        ...(options.headers || {})
+      }
+    });
+
+    let body = null;
+    try {
+      body = await response.json();
+    } catch (error) {
+      body = null;
+    }
+
+    if (!response.ok) {
+      const error = new Error(
+        body?.message || Object.values(body?.errors || {})[0] || "Algo deu errado."
+      );
+      error.fieldErrors = extractFieldErrors(body?.errors);
+      throw error;
+    }
+
+    return body;
   } catch (error) {
-    body = null;
-  }
-
-  if (!response.ok) {
-    const error = new Error(
-      body?.message || Object.values(body?.errors || {})[0] || "Algo deu errado."
+    if (error.message && error.message !== "Failed to fetch") {
+      throw error;
+    }
+    
+    const networkError = new Error(
+      "Não foi possível conectar ao servidor. Verifique se o backend está rodando."
     );
-    error.fieldErrors = extractFieldErrors(body?.errors);
-    throw error;
+    networkError.isNetworkError = true;
+    throw networkError;
   }
-
-  return body;
 };
 
 export const register = (data) =>
@@ -59,4 +71,35 @@ export const getProfile = (token) =>
     headers: {
       Authorization: `Bearer ${token}`
     }
+  });
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  return {
+    Authorization: `Bearer ${token}`
+  };
+};
+
+export const createRecharge = (data) =>
+  request("/recharges", {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data)
+  });
+
+export const getRecharges = (limit = 50, offset = 0, startDate = null) => {
+  let url = `/recharges?limit=${limit}&offset=${offset}`;
+  if (startDate) {
+    url += `&startDate=${encodeURIComponent(startDate)}`;
+  }
+  return request(url, {
+    method: "GET",
+    headers: getAuthHeaders()
+  });
+};
+
+export const deleteRecharge = (id) =>
+  request(`/recharges/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders()
   });

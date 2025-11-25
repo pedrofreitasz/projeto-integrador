@@ -6,7 +6,6 @@ import Cadastro from './pages/cadastro';
 import Perfil from './pages/perfil';
 import Calculadora from './pages/calculadora';
 import Orcamentos from './pages/orçamentos';
-import Historico from './pages/historico';
 import Mapa from './pages/mapa';
 import Configuracoes from './pages/configuracoes';
 import FAQ from './pages/FAQ';
@@ -22,11 +21,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/recuperar-senha" element={<RecuperarSenha />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/calculadora" element={<Calculadora />} />
         <Route path="/orcamentos" element={<Orcamentos />} />
-        <Route path="/historico" element={<Historico />} />
+        <Route path="/historico" element={<Dashboard />} />
         <Route path="/mapa" element={<Mapa />} />
         <Route path="/configuracoes" element={<Configuracoes />} />
         <Route path="/faq" element={<FAQ />} />

@@ -57,7 +57,7 @@ export default function Login() {
         password: formValues.password
       });
       localStorage.setItem("token", response.token);
-      navigate("/dashboard");
+      navigate("/historico");
     } catch (error) {
       setServerError(error.message);
       if (error.fieldErrors) {

@@ -7,7 +7,7 @@ export default function Navbar() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const loadUserProfile = () => {
     const token = localStorage.getItem("token");
     
     if (!token) {
@@ -25,6 +25,20 @@ export default function Navbar() {
         setLoading(false);
         localStorage.removeItem("token");
       });
+  };
+
+  useEffect(() => {
+    loadUserProfile();
+
+    const handleProfileUpdate = () => {
+      loadUserProfile();
+    };
+
+    window.addEventListener("profileUpdated", handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener("profileUpdated", handleProfileUpdate);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -48,10 +62,9 @@ export default function Navbar() {
         <ul className="flex items-center gap-8 text-sm font-medium text-gray-700">
           <li><Link to="/" className="hover:text-emerald-600 transition">Início</Link></li>
           <li><Link to="/mapa" className="hover:text-emerald-600 transition">Mapa de Pontos</Link></li>
-          <li><Link to="/dashboard" className="hover:text-emerald-600 transition">Dashboard</Link></li>
+          <li><Link to="/historico" className="hover:text-emerald-600 transition">Histórico</Link></li>
           <li><Link to="/orcamentos" className="hover:text-emerald-600 transition">Orçamento</Link></li>
           <li><Link to="/calculadora" className="hover:text-emerald-600 transition">Calculadora</Link></li>
-          <li><Link to="/historico" className="hover:text-emerald-600 transition">Histórico</Link></li>
           <li><Link to="/FAQ" className="hover:text-emerald-600 transition">FAQ</Link></li>
         </ul>
       </nav>
@@ -63,9 +76,22 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             <Link
               to="/perfil"
-              className="text-sm font-medium text-gray-700 hover:text-emerald-600 transition"
+              className="flex items-center gap-3 hover:opacity-80 transition"
             >
-              Olá, {user.name || user.nome}
+              {user.imagemUrl ? (
+                <img
+                  src={`${process.env.REACT_APP_API_URL || "http://localhost:5000"}${user.imagemUrl}`}
+                  alt="Foto de perfil"
+                  className="h-10 w-10 rounded-full object-cover border-2 border-emerald-200"
+                />
+              ) : (
+                <div className="h-10 w-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold text-sm">
+                  {(user.name || user.nome)?.charAt(0)?.toUpperCase() || "U"}
+                </div>
+              )}
+              <span className="text-sm font-medium text-gray-700 hover:text-emerald-600 transition">
+                Olá, {user.name || user.nome}
+              </span>
             </Link>
             <button
               onClick={handleLogout}

@@ -1,19 +1,12 @@
-CREATE DATABASE bancopidosguri;
-\c bancopidosguri;
-
-CREATE TABLE etc (
-  id SERIAL PRIMARY KEY,
-  nome VARCHAR(100)
-);
-
-INSERT INTO etc (nome) VALUES ('Pedro'), ('Luan'), ('Maria');
-
+CREATE DATABASE bancopi;
+\c bancopi;
 
 CREATE TABLE usuarios (
   id SERIAL PRIMARY KEY,
   nome VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   senha VARCHAR(255) NOT NULL,
+  imagem_url TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

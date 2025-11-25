@@ -73,6 +73,47 @@ export const getProfile = (token) =>
     }
   });
 
+export const updateProfile = async (formData) => {
+  const token = localStorage.getItem("token");
+  
+  try {
+    const response = await fetch(`${API_URL}/auth/profile`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    });
+
+    let body = null;
+    try {
+      body = await response.json();
+    } catch (error) {
+      body = null;
+    }
+
+    if (!response.ok) {
+      const error = new Error(
+        body?.message || Object.values(body?.errors || {})[0] || "Algo deu errado."
+      );
+      error.fieldErrors = extractFieldErrors(body?.errors);
+      throw error;
+    }
+
+    return body;
+  } catch (error) {
+    if (error.message && error.message !== "Failed to fetch") {
+      throw error;
+    }
+    
+    const networkError = new Error(
+      "Não foi possível conectar ao servidor. Verifique se o backend está rodando."
+    );
+    networkError.isNetworkError = true;
+    throw networkError;
+  }
+};
+
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
   return {

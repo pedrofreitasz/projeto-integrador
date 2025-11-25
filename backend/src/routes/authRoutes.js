@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { login, profile, register } from "../controllers/authController.js";
+import { login, profile, register, updateProfile } from "../controllers/authController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { validateFields } from "../middlewares/validateFields.js";
+import { upload } from "../middlewares/uploadMiddleware.js";
 
 const router = Router();
 
@@ -47,6 +48,7 @@ router.post(
 );
 
 router.get("/profile", authMiddleware, profile);
+router.put("/profile", authMiddleware, upload.single("imagem"), updateProfile);
 
 export default router;
 

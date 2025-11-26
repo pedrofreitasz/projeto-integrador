@@ -124,7 +124,7 @@ function Orcamentos() {
                       value={formData.empresa}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white"
-                      placeholder="Nome da sua empresa ou infore sua residência"
+                      placeholder="Nome da sua empresa ou informe sua residência"
                       required
                     />
                   </div>

@@ -115,7 +115,7 @@ function Orcamentos() {
 
                   <div>
                     <label htmlFor="empresa" className="block text-sm font-medium text-gray-700 mb-2">
-                      Empresa
+                      Empresa/residência
                     </label>
                     <input
                       type="text"
@@ -124,7 +124,7 @@ function Orcamentos() {
                       value={formData.empresa}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white"
-                      placeholder="Nome da sua empresa"
+                      placeholder="Nome da sua empresa ou infore sua residência"
                       required
                     />
                   </div>

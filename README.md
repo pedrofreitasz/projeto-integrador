@@ -1,10 +1,10 @@
-# ⚡ EV Charge SC
+#  EV Charge SC
 
 Projeto da empresa **EV Charge SC**, cujo objetivo é instalar pontos de recarga para veículos elétricos e incentivar o uso dos mesmos (EV) no oeste de Santa Catarina.  
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 - **Frontend**
   - [React](https://react.dev/) – Biblioteca para construção da interface
@@ -16,13 +16,13 @@ Projeto da empresa **EV Charge SC**, cujo objetivo é instalar pontos de recarga
 
 ---
 
-## 🗄️ Banco de Dados
+##  Banco de Dados
 
 Execute o arquivo `tabelas.sql` no terminal do sql ou no pgAdmin. 
 
 ---
 
-## ⚙️ Instalação e Execução
+##  Instalação e Execução
 
 ### Configurar o Backend
 

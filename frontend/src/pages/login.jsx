@@ -114,13 +114,7 @@ export default function Login() {
             }
           />
 
-          <div className="flex items-center justify-between text-sm">
-            <Link
-              to="/recuperar-senha"
-              className="font-semibold text-emerald-600"
-            >
-              Esqueceu sua senha?
-            </Link>
+          <div className="flex items-center justify-end text-sm">
             <Link to="/" className="text-slate-400 hover:text-slate-600">
               Página inicial
             </Link>

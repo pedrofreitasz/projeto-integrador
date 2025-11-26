@@ -10,7 +10,6 @@ import Mapa from './pages/mapa';
 import Configuracoes from './pages/configuracoes';
 import FAQ from './pages/FAQ';
 import Dashboard from './pages/dashboard';
-import RecuperarSenha from './pages/recuperarSenha';
 import './App.css';
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/recuperar-senha" element={<RecuperarSenha />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/calculadora" element={<Calculadora />} />
         <Route path="/orcamentos" element={<Orcamentos />} />

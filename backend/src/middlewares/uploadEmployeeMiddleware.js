@@ -6,7 +6,7 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const uploadsDir = path.join(__dirname, "../../uploads/usuarios");
+const uploadsDir = path.join(__dirname, "../../uploads/funcionarios");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -34,12 +34,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-export const upload = multer({
+export const uploadEmployee = multer({
   storage: storage,
   limits: {
     fileSize: 5 * 1024 * 1024
   },
   fileFilter: fileFilter
 });
-
 

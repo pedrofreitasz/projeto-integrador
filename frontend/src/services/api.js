@@ -144,3 +144,70 @@ export const deleteRecharge = (id) =>
     method: "DELETE",
     headers: getAuthHeaders()
   });
+
+// Employee functions
+const getEmployeeAuthHeaders = () => {
+  const token = localStorage.getItem("employeeToken");
+  return {
+    Authorization: `Bearer ${token}`
+  };
+};
+
+export const registerEmployee = (data) =>
+  request("/employees/register", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+export const loginEmployee = (data) =>
+  request("/employees/login", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+export const getEmployeeProfile = () =>
+  request("/employees/profile", {
+    method: "GET",
+    headers: getEmployeeAuthHeaders()
+  });
+
+export const updateEmployeeProfile = async (formData) => {
+  const token = localStorage.getItem("employeeToken");
+  
+  try {
+    const response = await fetch(`${API_URL}/employees/profile`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    });
+
+    let body = null;
+    try {
+      body = await response.json();
+    } catch (error) {
+      body = null;
+    }
+
+    if (!response.ok) {
+      const error = new Error(
+        body?.message || Object.values(body?.errors || {})[0] || "Algo deu errado."
+      );
+      error.fieldErrors = extractFieldErrors(body?.errors);
+      throw error;
+    }
+
+    return body;
+  } catch (error) {
+    if (error.message && error.message !== "Failed to fetch") {
+      throw error;
+    }
+    
+    const networkError = new Error(
+      "Não foi possível conectar ao servidor. Verifique se o backend está rodando."
+    );
+    networkError.isNetworkError = true;
+    throw networkError;
+  }
+};

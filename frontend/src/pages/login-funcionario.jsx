@@ -4,33 +4,37 @@ import AuthCard from "../components/auth/AuthCard";
 import AuthLayout from "../components/auth/AuthLayout";
 import { FormAlert } from "../components/auth/FormAlert";
 import { FormField } from "../components/auth/FormField";
-import { login } from "../services/api";
+import { loginEmployee } from "../services/api";
+import { formatCpf, cleanCpf, isValidCpfFormat } from "../utils/cpf";
 
-export default function Login() {
+export default function LoginFuncionario() {
   const navigate = useNavigate();
-  const [formValues, setFormValues] = useState({ email: "", password: "" });
+  const [formValues, setFormValues] = useState({ cpf: "", password: "" });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const isFormValid = useMemo(
-    () => formValues.email && formValues.password.length >= 6,
+    () => isValidCpfFormat(formValues.cpf) && formValues.password.length >= 6,
     [formValues]
   );
 
   const handleChange = (field, value) => {
-    setFormValues((prev) => ({ ...prev, [field]: value }));
+    if (field === "cpf") {
+      const formatted = formatCpf(value);
+      setFormValues((prev) => ({ ...prev, [field]: formatted }));
+    } else {
+      setFormValues((prev) => ({ ...prev, [field]: value }));
+    }
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const validate = () => {
     const newErrors = {};
-    const emailRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-    if (!formValues.email.trim() || !emailRegex.test(formValues.email)) {
-      newErrors.email = "Digite um e-mail válido.";
+    if (!isValidCpfFormat(formValues.cpf)) {
+      newErrors.cpf = "Digite um CPF válido.";
     }
 
     if (formValues.password.length < 6) {
@@ -52,12 +56,13 @@ export default function Login() {
 
     setIsSubmitting(true);
     try {
-      const response = await login({
-        email: formValues.email,
+      const response = await loginEmployee({
+        cpf: cleanCpf(formValues.cpf),
         password: formValues.password
       });
-      localStorage.setItem("token", response.token);
-      navigate("/historico");
+      localStorage.setItem("employeeToken", response.token);
+      localStorage.setItem("employeeData", JSON.stringify(response.employee));
+      navigate("/dashboard-funcionario");
     } catch (error) {
       setServerError(error.message);
       if (error.fieldErrors) {
@@ -71,12 +76,12 @@ export default function Login() {
   return (
     <AuthLayout>
       <AuthCard
-        title="Bem-vindo de volta"
-        subtitle="Acesse sua conta para continuar."
+        title="Login de Funcionário"
+        subtitle="Acesse sua conta de funcionário."
         footer={
           <p className="text-center text-sm text-slate-500">
             Não tem uma conta?{" "}
-            <Link to="/cadastro" className="font-semibold text-emerald-600">
+            <Link to="/cadastro-funcionario" className="font-semibold text-emerald-600">
               Cadastre-se
             </Link>
           </p>
@@ -85,15 +90,25 @@ export default function Login() {
         {serverError && <FormAlert variant="error" message={serverError} />}
 
         <form className="space-y-4" onSubmit={handleSubmit} noValidate>
-          <FormField
-            label="E-mail"
-            htmlFor="login-email"
-            type="email"
-            placeholder="nome@empresa.com"
-            value={formValues.email}
-            onChange={(event) => handleChange("email", event.target.value)}
-            error={errors.email}
-          />
+          <div>
+            <label htmlFor="login-cpf" className="block text-sm font-medium text-slate-700 mb-1">
+              CPF
+            </label>
+            <input
+              type="text"
+              id="login-cpf"
+              placeholder="000.000.000-00"
+              value={formValues.cpf}
+              onChange={(event) => handleChange("cpf", event.target.value)}
+              maxLength={14}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                errors.cpf ? "border-red-300" : "border-slate-300"
+              }`}
+            />
+            {errors.cpf && (
+              <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>
+            )}
+          </div>
 
           <FormField
             label="Senha"
@@ -127,20 +142,9 @@ export default function Login() {
           >
             {isSubmitting ? "Entrando..." : "Entrar"}
           </button>
-
-          <div className="pt-4 border-t border-slate-200">
-            <p className="text-center text-sm text-slate-500 mb-3">
-              É funcionário da empresa?
-            </p>
-            <Link
-              to="/login-funcionario"
-              className="block w-full text-center px-6 py-2 rounded-lg border border-slate-300 text-slate-700 font-medium hover:bg-slate-50 transition"
-            >
-              Login para Funcionários
-            </Link>
-          </div>
         </form>
       </AuthCard>
     </AuthLayout>
   );
 }
+

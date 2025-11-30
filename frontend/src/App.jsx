@@ -10,6 +10,9 @@ import Mapa from './pages/mapa';
 import Configuracoes from './pages/configuracoes';
 import FAQ from './pages/FAQ';
 import Dashboard from './pages/dashboard';
+import LoginFuncionario from './pages/login-funcionario';
+import CadastroFuncionario from './pages/cadastro-funcionario';
+import DashboardFuncionario from './pages/dashboard-funcionario';
 import './App.css';
 
 function App() {
@@ -26,6 +29,9 @@ function App() {
         <Route path="/mapa" element={<Mapa />} />
         <Route path="/configuracoes" element={<Configuracoes />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/login-funcionario" element={<LoginFuncionario />} />
+        <Route path="/cadastro-funcionario" element={<CadastroFuncionario />} />
+        <Route path="/dashboard-funcionario" element={<DashboardFuncionario />} />
       </Routes>
     </Router>
   );

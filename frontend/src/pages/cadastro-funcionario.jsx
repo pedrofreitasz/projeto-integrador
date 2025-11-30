@@ -4,17 +4,26 @@ import AuthCard from "../components/auth/AuthCard";
 import AuthLayout from "../components/auth/AuthLayout";
 import { FormAlert } from "../components/auth/FormAlert";
 import { FormField } from "../components/auth/FormField";
-import { register } from "../services/api";
+import { registerEmployee } from "../services/api";
+import { formatCpf, cleanCpf, isValidCpfFormat } from "../utils/cpf";
 
 const initialValues = {
   name: "",
+  cpf: "",
   email: "",
   password: "",
   passwordConfirm: "",
-  acceptTerms: false
+  position: ""
 };
 
-export default function Register() {
+const CARGO_OPTIONS = [
+  { value: "pedreiro", label: "Pedreiro" },
+  { value: "eletrecista", label: "Eletrecista" },
+  { value: "responsável por instalação", label: "Responsável por Instalação" },
+  { value: "CEO", label: "CEO" }
+];
+
+export default function CadastroFuncionario() {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
@@ -25,15 +34,21 @@ export default function Register() {
   const isFormValid = useMemo(
     () =>
       formValues.name &&
+      isValidCpfFormat(formValues.cpf) &&
       formValues.email &&
+      formValues.position &&
       formValues.password.length >= 6 &&
-      formValues.password === formValues.passwordConfirm &&
-      formValues.acceptTerms,
+      formValues.password === formValues.passwordConfirm,
     [formValues]
   );
 
   const handleChange = (field, value) => {
-    setFormValues((prev) => ({ ...prev, [field]: value }));
+    if (field === "cpf") {
+      const formatted = formatCpf(value);
+      setFormValues((prev) => ({ ...prev, [field]: formatted }));
+    } else {
+      setFormValues((prev) => ({ ...prev, [field]: value }));
+    }
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
@@ -42,10 +57,18 @@ export default function Register() {
 
     if (!formValues.name.trim()) newErrors.name = "Informe seu nome completo.";
 
+    if (!isValidCpfFormat(formValues.cpf)) {
+      newErrors.cpf = "Informe um CPF válido.";
+    }
+
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!formValues.email.trim() || !emailRegex.test(formValues.email)) {
       newErrors.email = "Digite um e-mail válido.";
+    }
+
+    if (!formValues.position) {
+      newErrors.position = "Selecione um cargo.";
     }
 
     if (formValues.password.length < 6) {
@@ -54,11 +77,6 @@ export default function Register() {
 
     if (formValues.password !== formValues.passwordConfirm) {
       newErrors.passwordConfirm = "As senhas precisam ser iguais.";
-    }
-
-    if (!formValues.acceptTerms) {
-      newErrors.acceptTerms =
-        "É necessário aceitar os Termos de Serviço e Política de Privacidade.";
     }
 
     return newErrors;
@@ -77,14 +95,16 @@ export default function Register() {
 
     setIsSubmitting(true);
     try {
-      await register({
+      await registerEmployee({
         name: formValues.name,
+        cpf: cleanCpf(formValues.cpf),
         email: formValues.email,
         password: formValues.password,
-        passwordConfirm: formValues.passwordConfirm
+        passwordConfirm: formValues.passwordConfirm,
+        position: formValues.position
       });
-      setSuccessMessage("Conta criada com sucesso! Redirecionando...");
-      setTimeout(() => navigate("/login"), 1800);
+      setSuccessMessage("Funcionário cadastrado com sucesso! Redirecionando...");
+      setTimeout(() => navigate("/login-funcionario"), 1800);
     } catch (error) {
       setServerError(error.message);
       if (error.fieldErrors) {
@@ -98,12 +118,12 @@ export default function Register() {
   return (
     <AuthLayout>
       <AuthCard
-        title="Crie sua Conta"
-        subtitle="Rápido e fácil. Comece a gerenciar seus pontos de recarga."
+        title="Cadastro de Funcionário"
+        subtitle="Crie sua conta como funcionário da empresa."
         footer={
           <p className="text-center text-sm text-slate-500">
             Já tem uma conta?{" "}
-            <Link to="/login" className="font-semibold text-emerald-600">
+            <Link to="/login-funcionario" className="font-semibold text-emerald-600">
               Faça login
             </Link>
           </p>
@@ -118,11 +138,31 @@ export default function Register() {
           <FormField
             label="Nome completo"
             htmlFor="name"
-            placeholder="Ex: Maria Silva"
+            placeholder="Ex: João Silva"
             value={formValues.name}
             onChange={(event) => handleChange("name", event.target.value)}
             error={errors.name}
           />
+
+          <div>
+            <label htmlFor="cpf" className="block text-sm font-medium text-slate-700 mb-1">
+              CPF *
+            </label>
+            <input
+              type="text"
+              id="cpf"
+              placeholder="000.000.000-00"
+              value={formValues.cpf}
+              onChange={(event) => handleChange("cpf", event.target.value)}
+              maxLength={14}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                errors.cpf ? "border-red-300" : "border-slate-300"
+              }`}
+            />
+            {errors.cpf && (
+              <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>
+            )}
+          </div>
 
           <FormField
             label="E-mail"
@@ -133,6 +173,30 @@ export default function Register() {
             onChange={(event) => handleChange("email", event.target.value)}
             error={errors.email}
           />
+
+          <div>
+            <label htmlFor="position" className="block text-sm font-medium text-slate-700 mb-1">
+              Cargo *
+            </label>
+            <select
+              id="position"
+              value={formValues.position}
+              onChange={(event) => handleChange("position", event.target.value)}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                errors.position ? "border-red-300" : "border-slate-300"
+              }`}
+            >
+              <option value="">Selecione um cargo</option>
+              {CARGO_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.position && (
+              <p className="text-xs text-red-500 mt-1">{errors.position}</p>
+            )}
+          </div>
 
           <FormField
             label="Senha"
@@ -156,41 +220,6 @@ export default function Register() {
             error={errors.passwordConfirm}
           />
 
-          <div className="space-y-2">
-            <label className="flex items-start gap-3 text-sm text-slate-600">
-              <input
-                type="checkbox"
-                className="mt-1 h-5 w-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                checked={formValues.acceptTerms}
-                onChange={(event) =>
-                  handleChange("acceptTerms", event.target.checked)
-                }
-              />
-              <span>
-                Li e aceito os{" "}
-                <a
-                  className="font-semibold text-emerald-600"
-                  href="#term"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Termos de Serviço
-                </a>{" "}
-                e a{" "}
-                <a
-                  className="font-semibold text-emerald-600"
-                  href="#privacy"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Política de Privacidade
-                </a>
-                .
-              </span>
-            </label>
-            {errors.acceptTerms && (
-              <p className="text-xs text-red-500">{errors.acceptTerms}</p>
-            )}
-          </div>
-
           <button
             type="submit"
             disabled={!isFormValid || isSubmitting}
@@ -198,20 +227,9 @@ export default function Register() {
           >
             {isSubmitting ? "Cadastrando..." : "Cadastrar"}
           </button>
-
-          <div className="pt-4 border-t border-slate-200">
-            <p className="text-center text-sm text-slate-500 mb-3">
-              É funcionário da empresa?
-            </p>
-            <Link
-              to="/cadastro-funcionario"
-              className="block w-full text-center px-6 py-2 rounded-lg border border-slate-300 text-slate-700 font-medium hover:bg-slate-50 transition"
-            >
-              Cadastro para Funcionários
-            </Link>
-          </div>
         </form>
       </AuthCard>
     </AuthLayout>
   );
 }
+

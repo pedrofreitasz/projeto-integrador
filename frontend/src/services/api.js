@@ -259,3 +259,48 @@ export const deleteUser = (id) =>
     method: "DELETE",
     headers: getEmployeeAuthHeaders()
   });
+
+export const createInstallationRequest = (data) =>
+  request("/installations", {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data)
+  });
+
+export const getAllInstallationRequests = () =>
+  request("/installations", {
+    method: "GET",
+    headers: getEmployeeAuthHeaders()
+  });
+
+export const getInstallationRequestById = (id) =>
+  request(`/installations/${id}`, {
+    method: "GET",
+    headers: getEmployeeAuthHeaders()
+  });
+
+export const assignProfessionals = (id, data) =>
+  request(`/installations/${id}/professionals`, {
+    method: "POST",
+    headers: getEmployeeAuthHeaders(),
+    body: JSON.stringify(data)
+  });
+
+export const completeInstallation = (id, data) =>
+  request(`/installations/${id}/complete`, {
+    method: "POST",
+    headers: getEmployeeAuthHeaders(),
+    body: JSON.stringify(data)
+  });
+
+export const getBalance = () =>
+  request("/installations/admin/balance", {
+    method: "GET",
+    headers: getEmployeeAuthHeaders()
+  });
+
+export const getEmployeesByPosition = (position) =>
+  request(`/installations/employees/position/${position}`, {
+    method: "GET",
+    headers: getEmployeeAuthHeaders()
+  });

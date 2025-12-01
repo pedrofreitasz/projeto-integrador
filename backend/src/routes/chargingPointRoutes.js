@@ -20,3 +20,4 @@ router.delete("/:id", employeeAuthMiddleware, requireCEOOrInstalador, deleteChar
 export default router;
 
 
+

@@ -97,7 +97,15 @@ export default function Navbar() {
             <li><Link to="/historico" className="hover:text-emerald-600 transition">Histórico</Link></li>
           )}
           {isEmployee && (
-            <li><Link to="/dashboard-funcionario" className="hover:text-emerald-600 transition">Dashboard</Link></li>
+            <>
+              <li><Link to="/dashboard-funcionario" className="hover:text-emerald-600 transition">Dashboard</Link></li>
+              {(employee?.position === "responsável por instalação" || employee?.position === "CEO") && (
+                <li><Link to="/instalacao" className="hover:text-emerald-600 transition">Instalações</Link></li>
+              )}
+              {employee?.position === "CEO" && (
+                <li><Link to="/balanco" className="hover:text-emerald-600 transition">Balanço</Link></li>
+              )}
+            </>
           )}
         </ul>
       </nav>

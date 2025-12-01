@@ -117,6 +117,14 @@ export const Employee = {
     return rows;
   },
 
+  async findByPosition(position) {
+    const { rows } = await pool.query(
+      `SELECT id, nome AS "name", cpf, email, cargo AS "position", imagem_url AS "imagemUrl", created_at AS "createdAt" FROM funcionarios WHERE cargo = $1 ORDER BY nome`,
+      [position]
+    );
+    return rows;
+  },
+
   async delete(id) {
     const { rows } = await pool.query(
       `DELETE FROM funcionarios WHERE id = $1 RETURNING id`,

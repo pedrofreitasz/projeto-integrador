@@ -13,6 +13,8 @@ import Dashboard from './pages/dashboard';
 import LoginFuncionario from './pages/login-funcionario';
 import CadastroFuncionario from './pages/cadastro-funcionario';
 import DashboardFuncionario from './pages/dashboard-funcionario';
+import Instalacao from './pages/instalacao';
+import Balanco from './pages/balanco';
 import './App.css';
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
         <Route path="/login-funcionario" element={<LoginFuncionario />} />
         <Route path="/cadastro-funcionario" element={<CadastroFuncionario />} />
         <Route path="/dashboard-funcionario" element={<DashboardFuncionario />} />
+        <Route path="/instalacao" element={<Instalacao />} />
+        <Route path="/balanco" element={<Balanco />} />
       </Routes>
     </Router>
   );

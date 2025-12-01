@@ -7,6 +7,7 @@ import rechargeRoutes from "./routes/rechargeRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
 import chargingPointRoutes from "./routes/chargingPointRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import installationRoutes from "./routes/installationRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,5 +29,6 @@ app.use("/recharges", rechargeRoutes);
 app.use("/employees", employeeRoutes);
 app.use("/charging-points", chargingPointRoutes);
 app.use("/admin", adminRoutes);
+app.use("/installations", installationRoutes);
 
 export default app;

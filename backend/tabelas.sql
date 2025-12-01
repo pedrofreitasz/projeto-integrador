@@ -50,3 +50,34 @@ CREATE TABLE pontos_recarga (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE solicitacoes_instalacao (
+  id SERIAL PRIMARY KEY,
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  tipo_instalacao VARCHAR(50) NOT NULL, 
+  endereco VARCHAR(300) NOT NULL,
+  cidade VARCHAR(100) NOT NULL,
+  estado VARCHAR(2),
+  cep VARCHAR(10),
+  distancia_quadro DECIMAL(10, 2),
+  tipo_residencia VARCHAR(50),
+  tipo_carregador VARCHAR(50),
+  preco_total DECIMAL(10, 2) NOT NULL,
+  custo_total DECIMAL(10, 2),
+  status VARCHAR(50) DEFAULT 'pendente',
+  responsavel_id INTEGER REFERENCES funcionarios(id),
+  latitude DECIMAL(10, 8),
+  longitude DECIMAL(11, 8),
+  observacoes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE profissionais_instalacao (
+  id SERIAL PRIMARY KEY,
+  solicitacao_id INTEGER NOT NULL REFERENCES solicitacoes_instalacao(id) ON DELETE CASCADE,
+  funcionario_id INTEGER NOT NULL REFERENCES funcionarios(id) ON DELETE CASCADE,
+  cargo VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(solicitacao_id, funcionario_id)
+);

@@ -34,3 +34,19 @@ CREATE TABLE funcionarios (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE pontos_recarga (
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(200) NOT NULL,
+  endereco VARCHAR(300) NOT NULL,
+  cidade VARCHAR(100) NOT NULL,
+  latitude DECIMAL(10, 8) NOT NULL,
+  longitude DECIMAL(11, 8) NOT NULL,
+  tipo_conector VARCHAR(50) NOT NULL,
+  velocidade VARCHAR(50) NOT NULL,
+  potencia VARCHAR(20) NOT NULL,
+  disponivel BOOLEAN DEFAULT TRUE,
+  funcionario_id INTEGER REFERENCES funcionarios(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -25,3 +25,4 @@ export const isValidCpfFormat = (cpf) => {
   return cleaned.length === 11 && /^\d{11}$/.test(cleaned);
 };
 
+

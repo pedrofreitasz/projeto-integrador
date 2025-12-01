@@ -145,7 +145,6 @@ export const deleteRecharge = (id) =>
     headers: getAuthHeaders()
   });
 
-// Employee functions
 const getEmployeeAuthHeaders = () => {
   const token = localStorage.getItem("employeeToken");
   return {
@@ -211,3 +210,52 @@ export const updateEmployeeProfile = async (formData) => {
     throw networkError;
   }
 };
+
+export const getChargingPoints = () =>
+  request("/charging-points", {
+    method: "GET"
+  });
+
+export const createChargingPoint = (data) =>
+  request("/charging-points", {
+    method: "POST",
+    headers: getEmployeeAuthHeaders(),
+    body: JSON.stringify(data)
+  });
+
+export const updateChargingPoint = (id, data) =>
+  request(`/charging-points/${id}`, {
+    method: "PUT",
+    headers: getEmployeeAuthHeaders(),
+    body: JSON.stringify(data)
+  });
+
+export const deleteChargingPoint = (id) =>
+  request(`/charging-points/${id}`, {
+    method: "DELETE",
+    headers: getEmployeeAuthHeaders()
+  });
+
+export const getAllEmployees = () =>
+  request("/admin/employees", {
+    method: "GET",
+    headers: getEmployeeAuthHeaders()
+  });
+
+export const deleteEmployee = (id) =>
+  request(`/admin/employees/${id}`, {
+    method: "DELETE",
+    headers: getEmployeeAuthHeaders()
+  });
+
+export const getAllUsers = () =>
+  request("/admin/users", {
+    method: "GET",
+    headers: getEmployeeAuthHeaders()
+  });
+
+export const deleteUser = (id) =>
+  request(`/admin/users/${id}`, {
+    method: "DELETE",
+    headers: getEmployeeAuthHeaders()
+  });

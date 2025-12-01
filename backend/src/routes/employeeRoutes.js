@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { login, profile, register, updateProfile } from "../controllers/employeeController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { employeeAuthMiddleware } from "../middlewares/employeeAuthMiddleware.js";
 import { validateFields } from "../middlewares/validateFields.js";
 import { uploadEmployee } from "../middlewares/uploadEmployeeMiddleware.js";
 
@@ -54,8 +54,8 @@ router.post(
   login
 );
 
-router.get("/profile", authMiddleware, profile);
-router.put("/profile", authMiddleware, uploadEmployee.single("imagem"), updateProfile);
+router.get("/profile", employeeAuthMiddleware, profile);
+router.put("/profile", employeeAuthMiddleware, uploadEmployee.single("imagem"), updateProfile);
 
 export default router;
 

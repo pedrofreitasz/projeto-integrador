@@ -108,6 +108,21 @@ export const Employee = {
     );
 
     return rows[0];
+  },
+
+  async findAll() {
+    const { rows } = await pool.query(
+      `SELECT id, nome AS "name", cpf, email, cargo AS "position", imagem_url AS "imagemUrl", created_at AS "createdAt" FROM funcionarios ORDER BY nome`
+    );
+    return rows;
+  },
+
+  async delete(id) {
+    const { rows } = await pool.query(
+      `DELETE FROM funcionarios WHERE id = $1 RETURNING id`,
+      [id]
+    );
+    return rows[0];
   }
 };
 

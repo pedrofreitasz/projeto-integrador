@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
+import { getChargingPoints } from '../services/api';
 import 'leaflet/dist/leaflet.css';
 
 delete Icon.Default.prototype._getIconUrl;
@@ -58,375 +59,43 @@ const createChargingIcon = (isAvailable = true) => {
   });
 };
 
-const pontosCarregamento = [
-  {
-    id: 1,
-    nome: 'Posto de Recarga Chapecó Centro',
-    endereco: 'Rua Nereu Ramos, 1000 - Centro, Chapecó',
-    cidade: 'Chapecó',
-    lat: -27.0953,
-    lng: -52.6167,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '22kW'
-  },
-  {
-    id: 2,
-    nome: 'Estação EV Charge Concórdia',
-    endereco: 'Rodovia SC 283, km 17 - Concórdia',
-    cidade: 'Concórdia',
-    lat: -27.2333,
-    lng: -52.0278,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 3,
-    nome: 'Shopping Center Xanxerê',
-    endereco: 'Av. Nereu Ramos, 1500 - Centro, Xanxerê',
-    cidade: 'Xanxerê',
-    lat: -26.8833,
-    lng: -52.4000,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 4,
-    nome: 'Posto BR Maravilha',
-    endereco: 'BR-282, km 45 - Maravilha',
-    cidade: 'Maravilha',
-    lat: -26.7667,
-    lng: -53.1833,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: false,
-    potencia: '50kW'
-  },
-  {
-    id: 5,
-    nome: 'Hotel e Restaurante São Miguel',
-    endereco: 'Av. Getúlio Vargas, 500 - São Miguel do Oeste',
-    cidade: 'São Miguel do Oeste',
-    lat: -26.7167,
-    lng: -53.5167,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '11kW'
-  },
-  {
-    id: 6,
-    nome: 'Centro de Eventos Pinhalzinho',
-    endereco: 'Rua Principal, 200 - Pinhalzinho',
-    cidade: 'Pinhalzinho',
-    lat: -26.8500,
-    lng: -52.9833,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 7,
-    nome: 'Supermercado Itá',
-    endereco: 'Av. Central, 300 - Itá',
-    cidade: 'Itá',
-    lat: -27.2833,
-    lng: -52.3333,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 8,
-    nome: 'Posto Ipiranga Seara',
-    endereco: 'BR-282, km 120 - Seara',
-    cidade: 'Seara',
-    lat: -27.1500,
-    lng: -52.3167,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 9,
-    nome: 'Shopping Chapecó',
-    endereco: 'Av. Getúlio Vargas, 2000 - Centro, Chapecó',
-    cidade: 'Chapecó',
-    lat: -27.1000,
-    lng: -52.6200,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 10,
-    nome: 'Posto Shell Formosa',
-    endereco: 'BR-282, km 85 - Formosa do Sul',
-    cidade: 'Formosa do Sul',
-    lat: -26.6500,
-    lng: -52.8000,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '11kW'
-  },
-  {
-    id: 11,
-    nome: 'Hotel Plaza Quilombo',
-    endereco: 'Rua 15 de Novembro, 500 - Quilombo',
-    cidade: 'Quilombo',
-    lat: -26.7333,
-    lng: -52.7167,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 12,
-    nome: 'Estação Recarga União do Oeste',
-    endereco: 'Av. Principal, 300 - União do Oeste',
-    cidade: 'União do Oeste',
-    lat: -26.7667,
-    lng: -52.8500,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 13,
-    nome: 'Supermercado Modelo Coronel Freitas',
-    endereco: 'Rua da República, 200 - Coronel Freitas',
-    cidade: 'Coronel Freitas',
-    lat: -26.9000,
-    lng: -52.7000,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 14,
-    nome: 'Posto Petrobras Águas de Chapecó',
-    endereco: 'SC-283, km 25 - Águas de Chapecó',
-    cidade: 'Águas de Chapecó',
-    lat: -27.0667,
-    lng: -52.9833,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: false,
-    potencia: '50kW'
-  },
-  {
-    id: 15,
-    nome: 'Centro Comercial Nova Erechim',
-    endereco: 'Av. 7 de Setembro, 800 - Nova Erechim',
-    cidade: 'Nova Erechim',
-    lat: -26.9000,
-    lng: -52.9000,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '11kW'
-  },
-  {
-    id: 16,
-    nome: 'Estação EV Charge São Lourenço do Oeste',
-    endereco: 'Rua XV de Novembro, 400 - São Lourenço do Oeste',
-    cidade: 'São Lourenço do Oeste',
-    lat: -26.3500,
-    lng: -52.8500,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 17,
-    nome: 'Hotel e Pousada Guaraciaba',
-    endereco: 'Rua Principal, 150 - Guaraciaba',
-    cidade: 'Guaraciaba',
-    lat: -26.6000,
-    lng: -53.5167,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 18,
-    nome: 'Posto Shell Descanso',
-    endereco: 'BR-163, km 45 - Descanso',
-    cidade: 'Descanso',
-    lat: -26.8167,
-    lng: -53.5000,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 19,
-    nome: 'Shopping Center Chapecó Norte',
-    endereco: 'Av. Nereu Ramos, 3000 - Bairro Efapi, Chapecó',
-    cidade: 'Chapecó',
-    lat: -27.0800,
-    lng: -52.6000,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '22kW'
-  },
-  {
-    id: 20,
-    nome: 'Estação Recarga Águas Frias',
-    endereco: 'Rua Central, 100 - Águas Frias',
-    cidade: 'Águas Frias',
-    lat: -26.8667,
-    lng: -52.8500,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 21,
-    nome: 'Posto BR Ponte Serrada',
-    endereco: 'SC-283, km 180 - Ponte Serrada',
-    cidade: 'Ponte Serrada',
-    lat: -26.7333,
-    lng: -52.0167,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 22,
-    nome: 'Centro de Convenções Xaxim',
-    endereco: 'Av. Getúlio Vargas, 600 - Xaxim',
-    cidade: 'Xaxim',
-    lat: -26.9667,
-    lng: -52.5333,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '11kW'
-  },
-  {
-    id: 23,
-    nome: 'Hotel Fazenda Entre Rios',
-    endereco: 'Rodovia SC-283, km 200 - Entre Rios',
-    cidade: 'Entre Rios',
-    lat: -26.7167,
-    lng: -52.0667,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 24,
-    nome: 'Estação EV Charge Galvão',
-    endereco: 'Rua Principal, 250 - Galvão',
-    cidade: 'Galvão',
-    lat: -26.4500,
-    lng: -52.6833,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 25,
-    nome: 'Posto Ipiranga Cordilheira Alta',
-    endereco: 'SC-283, km 150 - Cordilheira Alta',
-    cidade: 'Cordilheira Alta',
-    lat: -26.9833,
-    lng: -52.6000,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '11kW'
-  },
-  {
-    id: 26,
-    nome: 'Shopping Center Concórdia Sul',
-    endereco: 'Av. Getúlio Vargas, 2500 - Concórdia',
-    cidade: 'Concórdia',
-    lat: -27.2500,
-    lng: -52.0500,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: true,
-    potencia: '50kW'
-  },
-  {
-    id: 27,
-    nome: 'Hotel e Restaurante Peritiba',
-    endereco: 'Rua da Paz, 300 - Peritiba',
-    cidade: 'Peritiba',
-    lat: -27.3833,
-    lng: -51.9000,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 28,
-    nome: 'Estação Recarga Alto Bela Vista',
-    endereco: 'Av. Central, 150 - Alto Bela Vista',
-    cidade: 'Alto Bela Vista',
-    lat: -27.4333,
-    lng: -51.9000,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '7.4kW'
-  },
-  {
-    id: 29,
-    nome: 'Posto Shell Ipumirim',
-    endereco: 'BR-282, km 200 - Ipumirim',
-    cidade: 'Ipumirim',
-    lat: -27.0833,
-    lng: -52.1333,
-    tipoConector: 'CCS',
-    velocidade: 'Rápida',
-    disponivel: false,
-    potencia: '50kW'
-  },
-  {
-    id: 30,
-    nome: 'Centro Comercial Lindóia do Sul',
-    endereco: 'Rua Principal, 200 - Lindóia do Sul',
-    cidade: 'Lindóia do Sul',
-    lat: -27.0500,
-    lng: -52.0833,
-    tipoConector: 'Tipo 2',
-    velocidade: 'Normal',
-    disponivel: true,
-    potencia: '11kW'
-  }
-];
-
 function Mapa() {
   const [searchTerm, setSearchTerm] = useState('');
   const [tipoConector, setTipoConector] = useState('Todos');
   const [velocidadeConector, setVelocidadeConector] = useState('Todos');
   const [disponivel, setDisponivel] = useState(false);
-  const [pontosFiltrados, setPontosFiltrados] = useState(pontosCarregamento);
+  const [pontosCarregamento, setPontosCarregamento] = useState([]);
+  const [pontosFiltrados, setPontosFiltrados] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadChargingPoints();
+  }, []);
+
+  const loadChargingPoints = async () => {
+    try {
+      setLoading(true);
+      const response = await getChargingPoints();
+      const pontos = response.pontos.map(ponto => ({
+        id: ponto.id,
+        nome: ponto.nome,
+        endereco: ponto.endereco,
+        cidade: ponto.cidade,
+        lat: parseFloat(ponto.latitude),
+        lng: parseFloat(ponto.longitude),
+        tipoConector: ponto.tipoConector,
+        velocidade: ponto.velocidade,
+        disponivel: ponto.disponivel,
+        potencia: ponto.potencia
+      }));
+      setPontosCarregamento(pontos);
+      setPontosFiltrados(pontos);
+    } catch (error) {
+      console.error("Erro ao carregar pontos de recarga:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     let filtrados = pontosCarregamento;
@@ -591,28 +260,32 @@ function Mapa() {
 
           <div className="mt-6">
             <p className="text-sm text-gray-600 mb-3">
-              {pontosFiltrados.length} ponto(s) encontrado(s)
+              {loading ? 'Carregando...' : `${pontosFiltrados.length} ponto(s) encontrado(s)`}
             </p>
             <div className="space-y-2 max-h-96 overflow-y-auto">
-              {pontosFiltrados.map((ponto) => (
-                <div
-                  key={ponto.id}
-                  className="p-3 border border-gray-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition cursor-pointer"
-                >
-                  <h3 className="font-semibold text-sm text-gray-800">{ponto.nome}</h3>
-                  <p className="text-xs text-gray-600 mt-1">{ponto.cidade}</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className={`text-xs px-2 py-1 rounded ${
-                      ponto.disponivel 
-                        ? 'bg-green-100 text-green-700' 
-                        : 'bg-red-100 text-red-700'
-                    }`}>
-                      {ponto.disponivel ? 'Disponível' : 'Indisponível'}
-                    </span>
-                    <span className="text-xs text-gray-500">{ponto.velocidade}</span>
+              {loading ? (
+                <p className="text-center text-gray-500 py-4">Carregando pontos...</p>
+              ) : (
+                pontosFiltrados.map((ponto) => (
+                  <div
+                    key={ponto.id}
+                    className="p-3 border border-gray-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition cursor-pointer"
+                  >
+                    <h3 className="font-semibold text-sm text-gray-800">{ponto.nome}</h3>
+                    <p className="text-xs text-gray-600 mt-1">{ponto.cidade}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        ponto.disponivel 
+                          ? 'bg-green-100 text-green-700' 
+                          : 'bg-red-100 text-red-700'
+                      }`}>
+                        {ponto.disponivel ? 'Disponível' : 'Indisponível'}
+                      </span>
+                      <span className="text-xs text-gray-500">{ponto.velocidade}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -630,7 +303,7 @@ function Mapa() {
               subdomains="abcd"
               maxZoom={19}
             />
-            {pontosFiltrados.map((ponto) => (
+            {!loading && pontosFiltrados.map((ponto) => (
               <Marker
                 key={ponto.id}
                 position={[ponto.lat, ponto.lng]}

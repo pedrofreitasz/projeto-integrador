@@ -89,6 +89,21 @@ export const User = {
     );
 
     return rows[0];
+  },
+
+  async findAll() {
+    const { rows } = await pool.query(
+      `SELECT id, nome AS "name", email, imagem_url AS "imagemUrl", created_at AS "createdAt" FROM usuarios ORDER BY nome`
+    );
+    return rows;
+  },
+
+  async delete(id) {
+    const { rows } = await pool.query(
+      `DELETE FROM usuarios WHERE id = $1 RETURNING id`,
+      [id]
+    );
+    return rows[0];
   }
 };
 

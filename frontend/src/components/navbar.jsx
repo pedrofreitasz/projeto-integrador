@@ -87,8 +87,7 @@ export default function Navbar() {
           {!isEmployee && (
             <>
               <li><Link to="/" className="hover:text-emerald-600 transition">Início</Link></li>
-              <li><Link to="/orcamentos" className="hover:text-emerald-600 transition">Orçamento</Link></li>
-              <li><Link to="/calculadora" className="hover:text-emerald-600 transition">Calculadora</Link></li>
+              <li><Link to="/calculadora" className="hover:text-emerald-600 transition">Orçamento</Link></li>
               <li><Link to="/FAQ" className="hover:text-emerald-600 transition">FAQ</Link></li>
             </>
           )}

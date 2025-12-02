@@ -122,10 +122,9 @@ function Mapa() {
     }
 
     setPontosFiltrados(filtrados);
-  }, [searchTerm, tipoConector, velocidadeConector, disponivel]);
+  }, [searchTerm, tipoConector, velocidadeConector, disponivel, pontosCarregamento]);
 
-  const handleBuscar = () => {
-  };
+  const handleBuscar = () => {};
 
   const center = [-27.0953, -52.6167];
 
@@ -133,8 +132,11 @@ function Mapa() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <main className="flex-grow flex" style={{ height: 'calc(100vh - 140px)' }}>
-        <div className="w-96 bg-white p-6 shadow-lg overflow-y-auto">
+      {/* layout responsivo: coluna no mobile, linha no desktop */}
+      <main className="flex-grow flex flex-col md:flex-row h-[calc(100dvh-140px)]">
+        
+        {/* sidebar: full width no mobile */}
+        <div className="w-full md:w-96 bg-white p-6 shadow-lg overflow-y-auto">
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-gray-800 mb-2">
               Encontre um ponto de recarga
@@ -274,11 +276,13 @@ function Mapa() {
                     <h3 className="font-semibold text-sm text-gray-800">{ponto.nome}</h3>
                     <p className="text-xs text-gray-600 mt-1">{ponto.cidade}</p>
                     <div className="flex items-center gap-2 mt-2">
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        ponto.disponivel 
-                          ? 'bg-green-100 text-green-700' 
-                          : 'bg-red-100 text-red-700'
-                      }`}>
+                      <span
+                        className={`text-xs px-2 py-1 rounded ${
+                          ponto.disponivel
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
+                      >
                         {ponto.disponivel ? 'Disponível' : 'Indisponível'}
                       </span>
                       <span className="text-xs text-gray-500">{ponto.velocidade}</span>
@@ -290,7 +294,8 @@ function Mapa() {
           </div>
         </div>
 
-        <div className="flex-1 relative">
+        {/* mapa: altura fixa no mobile, flex-1 no desktop */}
+        <div className="flex-1 relative h-80 md:h-auto">
           <MapContainer
             center={center}
             zoom={9}
@@ -303,46 +308,59 @@ function Mapa() {
               subdomains="abcd"
               maxZoom={19}
             />
-            {!loading && pontosFiltrados.map((ponto) => (
-              <Marker
-                key={ponto.id}
-                position={[ponto.lat, ponto.lng]}
-                icon={createChargingIcon(ponto.disponivel)}
-              >
-                <Popup className="custom-popup">
-                  <div className="p-3 min-w-[200px]">
-                    <div className="flex items-start gap-3 mb-2">
-                      <div className={`flex-shrink-0 w-3 h-3 rounded-full mt-1 ${
-                        ponto.disponivel ? 'bg-green-500' : 'bg-red-500'
-                      }`}></div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-base text-gray-800 mb-1">{ponto.nome}</h3>
-                        <p className="text-sm text-gray-600 mb-3">{ponto.endereco}</p>
-                      </div>
-                    </div>
-                    <div className="space-y-2 text-sm border-t pt-2">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Tipo:</span>
-                        <span className="font-semibold text-gray-800">{ponto.tipoConector}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Velocidade:</span>
-                        <span className="font-semibold text-gray-800">{ponto.velocidade}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Potência:</span>
-                        <span className="font-semibold text-gray-800">{ponto.potencia}</span>
-                      </div>
-                      <div className={`mt-3 pt-2 border-t text-center font-semibold ${
-                        ponto.disponivel ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {ponto.disponivel ? '✓ Disponível Agora' : '✗ Indisponível'}
+            {!loading &&
+              pontosFiltrados.map((ponto) => (
+                <Marker
+                  key={ponto.id}
+                  position={[ponto.lat, ponto.lng]}
+                  icon={createChargingIcon(ponto.disponivel)}
+                >
+                  <Popup className="custom-popup">
+                    <div className="p-3 min-w-[200px]">
+                      <div className="flex items-start gap-3 mb-2">
+                        <div
+                          className={`flex-shrink-0 w-3 h-3 rounded-full mt-1 ${
+                            ponto.disponivel ? 'bg-green-500' : 'bg-red-500'
+                          }`}
+                        ></div>
+                        <div className="flex-1">
+                          <h3 className="font-bold text-base text-gray-800 mb-1">
+                            {ponto.nome}
+                          </h3>
+                          <p className="text-sm text-gray-600 mb-3">{ponto.endereco}</p>
                         </div>
+                      </div>
+                      <div className="space-y-2 text-sm border-t pt-2">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Tipo:</span>
+                          <span className="font-semibold text-gray-800">
+                            {ponto.tipoConector}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Velocidade:</span>
+                          <span className="font-semibold text-gray-800">
+                            {ponto.velocidade}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Potência:</span>
+                          <span className="font-semibold text-gray-800">
+                            {ponto.potencia}
+                          </span>
+                        </div>
+                        <div
+                          className={`mt-3 pt-2 border-t text-center font-semibold ${
+                            ponto.disponivel ? 'text-green-600' : 'text-red-600'
+                          }`}
+                        >
+                          {ponto.disponivel ? '✓ Disponível Agora' : '✗ Indisponível'}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
+                  </Popup>
+                </Marker>
+              ))}
           </MapContainer>
         </div>
       </main>
@@ -353,3 +371,4 @@ function Mapa() {
 }
 
 export default Mapa;
+
